@@ -1,0 +1,20 @@
+# Core dependencies
+phonenumbers>=8.13.11
+opencage>=2.3.0
+folium>=0.14.0
+colorama>=0.4.6
+aiohttp>=3.8.4
+beautifulsoup4>=4.12.0
+pytz>=2023.3
+holehe>=1.61
+tqdm>=4.65.0
+
+# Additional required dependencies
+lxml>=4.9.0
+tkinter  # Usually comes with Python
+pillow>=9.0.0  # For image handling
+pygame>=2.5.0  # For sound effects
+bs4>=0.0.1
+wmi>=1.5.1  # For Windows Management Instrumentation
+python-nmap>=0.7.1  # For network scanning
+netifaces>=0.11.0  # For network interface handling
