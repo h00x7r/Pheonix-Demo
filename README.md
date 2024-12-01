@@ -36,7 +36,7 @@ pip install -r requirements.txt
 
 Run the demo version:
 
-python Pheonix-Demo.py
+python Pheonix_Demo.py
 
 
 ### Demo Limitations
