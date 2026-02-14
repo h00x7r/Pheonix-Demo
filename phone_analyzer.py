@@ -8,8 +8,12 @@ class PhoneAnalyzer:
         self.raw_number = phone_number
         try:
             self.parsed_number = phonenumbers.parse(phone_number)
-            self.geocoder = OpenCageGeocode(opencage_api_key)
-            print(f"{Fore.GREEN}OpenCage API initialized successfully{Style.RESET_ALL}")
+            if opencage_api_key:
+                self.geocoder = OpenCageGeocode(opencage_api_key)
+                print(f"{Fore.GREEN}OpenCage API initialized successfully{Style.RESET_ALL}")
+            else:
+                self.geocoder = None
+                print(f"{Fore.YELLOW}OpenCage API key not provided. Geocoding features will be disabled.{Style.RESET_ALL}")
         except phonenumbers.NumberParseException:
             raise ValueError("Invalid phone number format")
 

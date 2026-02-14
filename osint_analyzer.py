@@ -58,12 +58,12 @@ class OSINTAnalyzer:
             return f"Error performing WHOIS lookup: {e}"
 
     def check_breach(self, email_address):
-        if not HIBP_API_KEY or HIBP_API_KEY == "YOUR_HIBP_API_KEY":
+        if not HIBP_API_KEY:
             return "HIBP API key not configured. Please add your API key to config.py to use this feature."
 
         headers = {
             "hibp-api-key": HIBP_API_KEY,
-            "User-Agent": "Pheonix-Phone-Tool"
+            "User-Agent": "Phoenix-Phone-Tool"
         }
         url = f"https://haveibeenpwned.com/api/v3/breachedaccount/{email_address}"
         
@@ -109,7 +109,7 @@ class OSINTAnalyzer:
     def analyze_ip_address(self, ip_address):
         results = ""
         # Geoapify IP Geolocation
-        if GEOAPIFY_API_KEY and GEOAPIFY_API_KEY != "YOUR_GEOAPIFY_API_KEY":
+        if GEOAPIFY_API_KEY:
             geo_url = f"https://api.geoapify.com/v1/ipinfo?ip={ip_address}&apiKey={GEOAPIFY_API_KEY}"
             try:
                 geo_response = requests.get(geo_url, timeout=10)
