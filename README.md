@@ -14,7 +14,7 @@ A powerful phone number analysis tool that provides detailed information about p
 1. Clone the repository:
 ```bash
 git clone https://github.com/h00x7r/Pheonix_Demo.git
-cd Pheonix_Demo
+cd Pheonix
 ```
 
 2. Install required dependencies:
@@ -23,8 +23,6 @@ pip install -r requirements.txt
 ```
 
 ## Usage
-
-Run the tool:
 
 pyquirements
 
