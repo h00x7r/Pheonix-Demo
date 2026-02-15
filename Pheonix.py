@@ -257,9 +257,15 @@ class PhoneAnalyzerGUI:
 
     def _run_analysis(self):
         try:
+            # Disable buttons initially
+            self.view_map_btn.state(['disabled'])
+            self.telegram_btn.state(['disabled'])
+            self.whatsapp_btn.state(['disabled'])
+            self.facebook_btn.state(['disabled'])
+            self.instagram_btn.state(['disabled'])
+
             phone_number = self.phone_entry.get().strip()
             self.analyzer = PhoneAnalyzer(phone_number, OPEN_CAGE_API_KEY)
-            self.current_phone = phone_number
             
             # Update basic info
             validation = self.analyzer.validate_number()
@@ -280,6 +286,7 @@ class PhoneAnalyzerGUI:
             info_text += f"Timezone(s): {', '.join(basic_info['timezone'])}\n"
             info_text += f"Number Type: {number_type}\n"
 
+            self.current_phone = phone_number
             self.basic_info_text.delete(1.0, tk.END)
             self.basic_info_text.insert(tk.END, info_text)
             

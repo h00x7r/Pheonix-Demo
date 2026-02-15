@@ -2,6 +2,8 @@ import asyncio
 from holehe import core
 import whois
 import requests
+import re
+import ipaddress
 from config import HIBP_API_KEY, GEOAPIFY_API_KEY
 import phonenumbers
 from phonenumbers import carrier, geocoder, timezone, PhoneNumberFormat
@@ -52,14 +54,20 @@ class OSINTAnalyzer:
     def analyze_email_domain(self, email_address):
         try:
             domain = email_address.split('@')[-1]
+            if not re.match(r"^[a-zA-Z0-9.-]+$", domain):
+                return "Invalid domain format."
             w = whois.whois(domain)
             return w.text
         except Exception as e:
             return f"Error performing WHOIS lookup: {e}"
 
     def check_breach(self, email_address):
-        if not HIBP_API_KEY or HIBP_API_KEY == "YOUR_HIBP_API_KEY":
+        if not HIBP_API_KEY:
             return "HIBP API key not configured. Please add your API key to config.py to use this feature."
+
+        # Basic email validation
+        if not re.match(r"^[^@]+@[^@]+\.[^@]+$", email_address):
+            return "Invalid email address format."
 
         headers = {
             "hibp-api-key": HIBP_API_KEY,
@@ -108,8 +116,13 @@ class OSINTAnalyzer:
 
     def analyze_ip_address(self, ip_address):
         results = ""
+        try:
+            ipaddress.ip_address(ip_address)
+        except ValueError:
+            return "Invalid IP address format."
+
         # Geoapify IP Geolocation
-        if GEOAPIFY_API_KEY and GEOAPIFY_API_KEY != "YOUR_GEOAPIFY_API_KEY":
+        if GEOAPIFY_API_KEY:
             geo_url = f"https://api.geoapify.com/v1/ipinfo?ip={ip_address}&apiKey={GEOAPIFY_API_KEY}"
             try:
                 geo_response = requests.get(geo_url, timeout=10)
