@@ -24,6 +24,7 @@ import webbrowser
 from pathlib import Path
 import tkinter.messagebox
 import tkinter.filedialog
+import subprocess
 from config import OPEN_CAGE_API_KEY
 from phone_analyzer import PhoneAnalyzer
 from osint_analyzer import OSINTAnalyzer
@@ -286,7 +287,7 @@ class PhoneAnalyzerGUI:
             info_text += f"Timezone(s): {', '.join(basic_info['timezone'])}\n"
             info_text += f"Number Type: {number_type}\n"
 
-            self.current_phone = phone_number
+            self.current_phone = basic_info['formatted']['e164']
             self.basic_info_text.delete(1.0, tk.END)
             self.basic_info_text.insert(tk.END, info_text)
             
@@ -618,7 +619,6 @@ class PhoneAnalyzerGUI:
             command = ["nmap", "-F", target]
 
             # Execute the command using subprocess and capture output
-            import subprocess
             process = subprocess.run(command, capture_output=True, text=True, timeout=60)
 
             output = process.stdout

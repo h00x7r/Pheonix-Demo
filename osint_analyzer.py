@@ -14,6 +14,13 @@ class OSINTAnalyzer:
         pass
 
     async def analyze_email_or_username(self, query):
+        if '@' in query:
+             if not re.match(r"^[^@]+@[^@]+\.[^@]+$", query):
+                 raise ValueError("Invalid email format.")
+        else:
+             if not re.match(r"^[a-zA-Z0-9._-]+$", query):
+                 raise ValueError("Invalid username format.")
+
         results = await core.core(query, no_api_key=True, no_clear=True, no_color=True)
         return results
 
@@ -99,6 +106,9 @@ class OSINTAnalyzer:
 
     def enumerate_social_media_username(self, username):
         try:
+            if not re.match(r"^[a-zA-Z0-9._-]+$", username):
+                raise ValueError("Invalid username format.")
+
             results = sync_execute_queries([username])
             output = f"--- Social Media Username Enumeration for {username} ---\n"
             found_any = False
