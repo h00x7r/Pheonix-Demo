@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.env
+bad_block.txt
+good_block.txt
+fix_indent.py
+test_syntax.py

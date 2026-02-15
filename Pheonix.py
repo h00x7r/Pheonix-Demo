@@ -23,8 +23,8 @@ import math
 import webbrowser
 from pathlib import Path
 import tkinter.messagebox
-import hashlib
 import tkinter.filedialog
+import subprocess
 from config import OPEN_CAGE_API_KEY
 from phone_analyzer import PhoneAnalyzer
 from osint_analyzer import OSINTAnalyzer
@@ -33,7 +33,7 @@ from osint_analyzer import OSINTAnalyzer
 def _del(self):
     try:
         self.close()
-    except:
+    except Exception:
         pass
 tqdm.tqdm.__del__ = _del
 
@@ -193,38 +193,38 @@ class PhoneAnalyzerGUI:
         self.osint_phone_isp_btn.pack(side=tk.LEFT, padx=5)
 
         self.osint_phone_validate_btn = ttk.Button(osint_input_frame, text="Validate Number", command=self.start_phone_validation)
-	        self.osint_phone_validate_btn.pack(side=tk.LEFT, padx=5)
-	
-	        ttk.Label(osint_input_frame, text="Username for Social Enumeration:").pack(side=tk.LEFT, padx=5)
-	        self.social_username_entry = ttk.Entry(osint_input_frame, width=30)
-	        self.social_username_entry.pack(side=tk.LEFT, expand=True, fill='x', padx=5)
-	        self.social_username_entry.insert(0, "username") # Placeholder
-	
-	        self.social_enumerate_btn = ttk.Button(osint_input_frame, text="Enumerate Social Media", command=self.start_social_enumeration)
-	        self.social_enumerate_btn.pack(side=tk.LEFT, padx=5)
-	        
-	        self.osint_text = scrolledtext.ScrolledText(self.osint_frame, wrap=tk.WORD, height=20)
-	        self.osint_text.pack(expand=True, fill='both', padx=5, pady=5)
-	        
-	        # Network Analysis tab
-	        self.network_frame = ttk.Frame(self.notebook)
-	        self.notebook.add(self.network_frame, text="Network Analysis")
-	        
-	        network_input_frame = ttk.Frame(self.network_frame, padding="5")
-	        network_input_frame.pack(fill='x')
-	        
-	        ttk.Label(network_input_frame, text="Target Host/IP:").pack(side=tk.LEFT, padx=5)
-	        self.network_target_entry = ttk.Entry(network_input_frame, width=30)
-	        self.network_target_entry.pack(side=tk.LEFT, expand=True, fill='x', padx=5)
-	        self.network_target_entry.insert(0, "scanme.nmap.org") # Placeholder
-	        
-	        self.port_scan_btn = ttk.Button(network_input_frame, text="Perform Port Scan (Nmap)", command=self.start_port_scan)
-	        self.port_scan_btn.pack(side=tk.LEFT, padx=5)
-	        
-	        self.network_text = scrolledtext.ScrolledText(self.network_frame, wrap=tk.WORD, height=20)
-	        self.network_text.pack(expand=True, fill='both', padx=5, pady=5)
-	        
-	        # Map tab
+        self.osint_phone_validate_btn.pack(side=tk.LEFT, padx=5)
+
+        ttk.Label(osint_input_frame, text="Username for Social Enumeration:").pack(side=tk.LEFT, padx=5)
+        self.social_username_entry = ttk.Entry(osint_input_frame, width=30)
+        self.social_username_entry.pack(side=tk.LEFT, expand=True, fill='x', padx=5)
+        self.social_username_entry.insert(0, "username") # Placeholder
+
+        self.social_enumerate_btn = ttk.Button(osint_input_frame, text="Enumerate Social Media", command=self.start_social_enumeration)
+        self.social_enumerate_btn.pack(side=tk.LEFT, padx=5)
+
+        self.osint_text = scrolledtext.ScrolledText(self.osint_frame, wrap=tk.WORD, height=20)
+        self.osint_text.pack(expand=True, fill='both', padx=5, pady=5)
+
+        # Network Analysis tab
+        self.network_frame = ttk.Frame(self.notebook)
+        self.notebook.add(self.network_frame, text="Network Analysis")
+
+        network_input_frame = ttk.Frame(self.network_frame, padding="5")
+        network_input_frame.pack(fill='x')
+
+        ttk.Label(network_input_frame, text="Target Host/IP:").pack(side=tk.LEFT, padx=5)
+        self.network_target_entry = ttk.Entry(network_input_frame, width=30)
+        self.network_target_entry.pack(side=tk.LEFT, expand=True, fill='x', padx=5)
+        self.network_target_entry.insert(0, "scanme.nmap.org") # Placeholder
+
+        self.port_scan_btn = ttk.Button(network_input_frame, text="Perform Port Scan (Nmap)", command=self.start_port_scan)
+        self.port_scan_btn.pack(side=tk.LEFT, padx=5)
+
+        self.network_text = scrolledtext.ScrolledText(self.network_frame, wrap=tk.WORD, height=20)
+        self.network_text.pack(expand=True, fill='both', padx=5, pady=5)
+
+            # Map tab
         self.map_frame = ttk.Frame(self.notebook)
         self.notebook.add(self.map_frame, text="Location Map")
         self.map_text = scrolledtext.ScrolledText(self.map_frame, wrap=tk.WORD, height=20)
@@ -258,9 +258,15 @@ class PhoneAnalyzerGUI:
 
     def _run_analysis(self):
         try:
+            # Disable buttons initially
+            self.view_map_btn.state(['disabled'])
+            self.telegram_btn.state(['disabled'])
+            self.whatsapp_btn.state(['disabled'])
+            self.facebook_btn.state(['disabled'])
+            self.instagram_btn.state(['disabled'])
+
             phone_number = self.phone_entry.get().strip()
             self.analyzer = PhoneAnalyzer(phone_number, OPEN_CAGE_API_KEY)
-            self.current_phone = phone_number
             
             # Update basic info
             validation = self.analyzer.validate_number()
@@ -281,6 +287,7 @@ class PhoneAnalyzerGUI:
             info_text += f"Timezone(s): {', '.join(basic_info['timezone'])}\n"
             info_text += f"Number Type: {number_type}\n"
 
+            self.current_phone = basic_info['formatted']['e164']
             self.basic_info_text.delete(1.0, tk.END)
             self.basic_info_text.insert(tk.END, info_text)
             
@@ -586,69 +593,73 @@ class PhoneAnalyzerGUI:
         self.status_var.set("Generating map...")
         threading.Thread(target=self._generate_map).start()
 
-	    def start_port_scan(self):
-	        """Start the port scan in a separate thread"""
-	        target = self.network_target_entry.get().strip()
-	        if not target:
-	            tkinter.messagebox.showerror("Error", "Please enter a target host or IP.")
-	            return
-	
-	        self.port_scan_btn.state(['disabled'])
-	        self.network_text.delete(1.0, tk.END)
-	        self.network_text.insert(tk.END, f"Starting Nmap port scan on {target}... This may take a moment.\n")
-	        self.status_var.set(f"Running port scan on {target}...")
-	        
-	        threading.Thread(target=self._run_port_scan_thread, args=(target,)).start()
-	
-	    def _run_port_scan_thread(self, target):
-	        """Threaded function to run nmap and update GUI"""
-	        try:
-	            # Use a simple, non-aggressive scan for common ports
-	            command = f"nmap -F {target}" 
-	            
-	            # Execute the command using subprocess and capture output
-	            import subprocess
-	            process = subprocess.run(command, shell=True, capture_output=True, text=True, timeout=60)
-	            
-	            output = process.stdout
-	            if process.stderr:
-	                output += "\n--- Nmap Error Output ---\n" + process.stderr
-	            
-	            self.network_text.insert(tk.END, "\n--- Nmap Scan Results ---\n")
-	            self.network_text.insert(tk.END, output)
-	            self.status_var.set(f"Port scan on {target} complete.")
-	            
-	        except subprocess.TimeoutExpired:
-	            self.network_text.insert(tk.END, "\n--- Scan Failed ---\nNmap scan timed out after 60 seconds.")
-	            self.status_var.set(f"Port scan on {target} failed (Timeout).")
-	        except Exception as e:
-	            self.network_text.insert(tk.END, f"\n--- Scan Failed ---\nAn error occurred during the scan: {e}")
-	            self.status_var.set(f"Port scan on {target} failed.")
-	        finally:
-	            self.port_scan_btn.state(['!disabled'])
-	
-	    def _generate_map(self):
-	        try:
-	            if not self.analyzer:
-	                self.status_var.set("No phone number analyzed yet.")
-	                return
+    def start_port_scan(self):
+        """Start the port scan in a separate thread"""
+        target = self.network_target_entry.get().strip()
+        if not target:
+            tkinter.messagebox.showerror("Error", "Please enter a target host or IP.")
+            return
 
-	            # Use the region name first for geocoding
-	            region = self.analyzer.get_basic_info()['region']
-	            
-	            # Fallback to E164 number for more precise location if region is too broad (e.g., just a country)
-	            search_query = region
-	            if self.analyzer.get_region_code() == region: # If region is just the country name
-	                search_query = self.analyzer.get_e164_number()
-	
-	            if not search_query:
-	                self.status_var.set("No valid search query for map generation.")
-	                tkinter.messagebox.showerror("Error", "No valid search query for map generation.")
-	                return
-	
-	            try:
-	                results = self.analyzer.geocoder.geocode(search_query)
-	            except Exception as e:
+        # Validate target (only allow alphanumeric, dots, dashes, and underscores)
+        if not re.match(r"^[a-zA-Z0-9.-]+$", target):
+            tkinter.messagebox.showerror("Error", "Invalid target. Only alphanumeric characters, dots, and dashes are allowed.")
+            return
+
+        self.port_scan_btn.state(['disabled'])
+        self.network_text.delete(1.0, tk.END)
+        self.network_text.insert(tk.END, f"Starting Nmap port scan on {target}... This may take a moment.\n")
+        self.status_var.set(f"Running port scan on {target}...")
+
+        threading.Thread(target=self._run_port_scan_thread, args=(target,)).start()
+
+    def _run_port_scan_thread(self, target):
+        """Threaded function to run nmap and update GUI"""
+        try:
+            # Use a simple, non-aggressive scan for common ports
+            command = ["nmap", "-F", target]
+
+            # Execute the command using subprocess and capture output
+            process = subprocess.run(command, capture_output=True, text=True, timeout=60)
+
+            output = process.stdout
+            if process.stderr:
+                output += "\n--- Nmap Error Output ---\n" + process.stderr
+
+            self.network_text.insert(tk.END, "\n--- Nmap Scan Results ---\n")
+            self.network_text.insert(tk.END, output)
+            self.status_var.set(f"Port scan on {target} complete.")
+
+        except subprocess.TimeoutExpired:
+            self.network_text.insert(tk.END, "\n--- Scan Failed ---\nNmap scan timed out after 60 seconds.")
+            self.status_var.set(f"Port scan on {target} failed (Timeout).")
+        except Exception as e:
+            self.network_text.insert(tk.END, f"\n--- Scan Failed ---\nAn error occurred during the scan: {e}")
+            self.status_var.set(f"Port scan on {target} failed.")
+        finally:
+            self.port_scan_btn.state(['!disabled'])
+
+    def _generate_map(self):
+        try:
+            if not self.analyzer:
+                self.status_var.set("No phone number analyzed yet.")
+                return
+
+            # Use the region name first for geocoding
+            region = self.analyzer.get_basic_info()['region']
+
+            # Fallback to E164 number for more precise location if region is too broad (e.g., just a country)
+            search_query = region
+            if self.analyzer.get_region_code() == region: # If region is just the country name
+                search_query = self.analyzer.get_e164_number()
+
+            if not search_query:
+                self.status_var.set("No valid search query for map generation.")
+                tkinter.messagebox.showerror("Error", "No valid search query for map generation.")
+                return
+
+            try:
+                results = self.analyzer.geocoder.geocode(search_query)
+            except Exception as e:
                 self.status_var.set(f"OpenCage Geocoding API error: {e}")
                 tkinter.messagebox.showerror("API Error", f"OpenCage Geocoding API error: {e}. Please check your API key and daily quota.")
                 return
@@ -657,14 +668,14 @@ class PhoneAnalyzerGUI:
                 lat = results[0]['geometry']['lat']
                 lng = results[0]['geometry']['lng']
 
-	                # Create map
-	                # Adjust zoom level based on result confidence/type
-	                zoom_level = 10
-	                if 'confidence' in results[0] and results[0]['confidence'] > 5:
-	                    zoom_level = 14 # Higher confidence, zoom in more
-	                
-	                m = folium.Map(location=[lat, lng], zoom_start=zoom_level)
-	                folium.Marker([lat, lng], popup=results[0]['formatted']).add_to(m)
+                # Create map
+                # Adjust zoom level based on result confidence/type
+                zoom_level = 10
+                if 'confidence' in results[0] and results[0]['confidence'] > 5:
+                    zoom_level = 14 # Higher confidence, zoom in more
+
+                m = folium.Map(location=[lat, lng], zoom_start=zoom_level)
+                folium.Marker([lat, lng], popup=results[0]['formatted']).add_to(m)
 
                 # Save to file
                 map_file = "location_map.html"
@@ -688,7 +699,6 @@ class PhoneAnalyzerGUI:
             tkinter.messagebox.showerror("Error", f"Error generating map: {e}")
         finally:
             self.view_map_btn.state(['!disabled'])
-
 if __name__ == "__main__":
     root = tk.Tk()
     app = PhoneAnalyzerGUI(root)

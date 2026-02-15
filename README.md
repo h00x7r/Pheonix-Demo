@@ -13,6 +13,7 @@ A powerful phone number analysis tool that provides detailed information about p
 
 1. Clone the repository:
 ```bash
+git clone https://github.com/h00x7r/Pheonix.git
 git clone https://github.com/h00x7r/Pheonix_Demo.git
 cd Pheonix
 ```
