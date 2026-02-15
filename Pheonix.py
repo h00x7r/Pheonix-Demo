@@ -592,6 +592,11 @@ class PhoneAnalyzerGUI:
             tkinter.messagebox.showerror("Error", "Please enter a target host or IP.")
             return
 
+        # Validate target (only allow alphanumeric, dots, dashes, and underscores)
+        if not re.match(r"^[a-zA-Z0-9.-]+$", target):
+            tkinter.messagebox.showerror("Error", "Invalid target. Only alphanumeric characters, dots, and dashes are allowed.")
+            return
+
         self.port_scan_btn.state(['disabled'])
         self.network_text.delete(1.0, tk.END)
         self.network_text.insert(tk.END, f"Starting Nmap port scan on {target}... This may take a moment.\n")
