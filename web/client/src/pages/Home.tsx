@@ -50,8 +50,8 @@ type AnalysisResult =
   | { kind: "message"; score: number; title: string; subtitle: string; points: string[]; response: string[] }
   | { kind: "qr"; score: number; title: string; subtitle: string; points: string[]; response: string[] };
 
-const commandHero = "/manus-storage/phoenix-command-hero_636257dc.jpg";
-const phoenixMark = "/manus-storage/phoenix-official-mark_40234c63.png";
+const commandHero = `${import.meta.env.BASE_URL}assets/phoenix-command-hero.webp`;
+const phoenixMark = `${import.meta.env.BASE_URL}assets/phoenix-official-mark.webp`;
 
 const stations: Array<{ id: StationId; label: string; sublabel: string; icon: typeof Phone }> = [
   { id: "number", label: "بنية الرقم", sublabel: "المحطة الأساسية", icon: Phone },

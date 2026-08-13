@@ -26,3 +26,27 @@ button, input, textarea { font: inherit; } button { cursor: pointer; } button:fo
 @media (prefers-reduced-motion: reduce) { *,*::before,*::after { animation-duration:.01ms!important; animation-iteration-count:1!important; scroll-behavior:auto!important; } }
 @media (max-width: 960px) { .command-app { grid-template-columns:1fr; }.command-rail { position:relative; height:auto; padding:15px 18px; border-left:0; border-bottom:1px solid rgba(214,228,222,.13); }.rail-rule,.rail-bottom { display:none; }.station-nav { display:flex; overflow-x:auto; gap:4px; margin-top:15px; }.station-nav__item { min-width:145px; }.hero-glass-card { display:none; }.workspace-grid { grid-template-columns:1fr; }.command-footer-grid { grid-template-columns:1fr 1fr; }.scroll-top { grid-column:1 / -1; min-height:74px; flex-direction:row; } }
 @media (max-width: 620px) { .command-topbar { padding:17px 18px; }.timestamp { display:none; }.command-hero { min-height:390px; background-position:62% center!important; }.hero-copy { padding:46px 20px 38px; }.hero-copy h1 { font-size:45px; }.hero-metrics { gap:10px; }.hero-metrics span { padding-left:10px; font-size:8px; }.try-guide { align-items:flex-start; flex-direction:column; gap:12px; padding:15px 20px; }.try-guide__head { min-width:0; width:100%; }.try-guide__steps { gap:8px; }.command-workspace { padding:28px 16px; }.workspace-head { align-items:flex-start; flex-direction:column; }.workspace-head h2 { font-size:28px; }.tool-console { padding:18px; }.result-summary { grid-template-columns:62px minmax(0,1fr); }.copy-report { width:fit-content; grid-column:1 / -1; }.command-footer-grid { grid-template-columns:1fr; }.command-log,.command-ethics { min-height:auto; }.station-nav__item { min-width:126px; }.station-nav__item small { display:none; }.station-nav__item { grid-template-columns:17px 20px minmax(0,1fr); padding:9px 5px; } }
+
+
+/* Phoenix Command Center — mobile repair: preserve the architectural rhythm while keeping every surface inside the viewport. */
+html, body, #root { max-width: 100%; overflow-x: hidden; }
+img, svg, video, canvas { max-width: 100%; }
+@media (max-width: 960px) {
+  .command-main, .command-workspace, .workspace-grid, .workspace-grid > *, .command-footer-grid { min-width: 0; max-width: 100%; }
+  .workspace-grid > * { width: 100%; }
+  .station-nav { min-width: 0; }
+}
+@media (max-width: 620px) {
+  .command-topbar { flex-wrap: wrap; gap: 10px; }
+  .system-status { min-width: 0; max-width: 100%; }
+  .topbar-actions { max-width: 100%; }
+  .station-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; gap: 6px; width: 100%; }
+  .station-nav__item, .station-nav__item:hover { min-width: 0; width: 100%; transform: none; }
+  .station-nav__item:last-child { grid-column: 1 / -1; }
+  .station-nav__item strong { min-width: 0; overflow-wrap: anywhere; }
+  .readout-top { min-width: 0; overflow: hidden; }
+  .tool-label { min-width: 0; flex-wrap: wrap; }
+  .command-input, .command-textarea { max-width: 100%; }
+  .command-input input { min-width: 0; max-width: 100%; }
+  .result-summary { min-width: 0; }
+}
