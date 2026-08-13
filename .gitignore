@@ -1,6 +1,29 @@
+# Python bytecode and tooling
 __pycache__/
-*.pyc
+*.py[cod]
+*.so
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Local environments and package builds
+.venv/
+venv/
+dist/
+build/
+*.egg-info/
+
+# Secrets and local configuration
 .env
+.env.*
+!.env.example
+
+# Application-generated files
+location_map.html
+*.log
+
+# Legacy local helper artifacts
 bad_block.txt
 good_block.txt
 fix_indent.py
