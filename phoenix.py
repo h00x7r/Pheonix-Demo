@@ -1,6 +1,6 @@
-"""Pheonix desktop utility.
+"""Phoenix desktop utility.
 
-Pheonix provides public numbering-plan metadata and opt-in, authorised-use
+Phoenix provides public numbering-plan metadata and opt-in, authorised-use
 network or account-enrichment helpers.  This edition has no trial counter,
 payment screen, licence key, remote activation or feature-use cap.
 """
@@ -25,16 +25,16 @@ from config import SETTINGS
 from osint_analyzer import OSINTAnalyzer
 from phone_analyzer import PhoneAnalyzer, PhoneInfo
 
-APP_NAME = "Pheonix"
+APP_NAME = "Phoenix"
 APP_VERSION = "2026.1.0"
-APP_DIRECTORY = Path.home() / ".pheonix"
+APP_DIRECTORY = Path.home() / ".phoenix"
 MAP_DIRECTORY = APP_DIRECTORY / "maps"
 TARGET_PATTERN = re.compile(r"^[A-Za-z0-9.-]{1,253}$")
 ResultT = TypeVar("ResultT")
 
 
 class PhoneAnalyzerGUI:
-    """Thread-safe Tk interface for Pheonix's public-data utilities."""
+    """Thread-safe Tk interface for Phoenix's public-data utilities."""
 
     def __init__(self, root: tk.Tk) -> None:
         self.root = root
@@ -123,7 +123,7 @@ class PhoneAnalyzerGUI:
         self._replace_text(
             self.basic_info_text,
             "Enter an international phone number and select Analyse.\n\n"
-            "Pheonix reports public numbering-plan metadata such as formatting, carrier labels, region and time-zone metadata. "
+            "Phoenix reports public numbering-plan metadata such as formatting, carrier labels, region and time-zone metadata. "
             "It cannot locate an individual or confirm account ownership.",
         )
 
@@ -255,7 +255,7 @@ class PhoneAnalyzerGUI:
             else:
                 self.root.after(0, lambda: self._background_succeeded(button, on_success, result))
 
-        threading.Thread(target=runner, daemon=True, name="pheonix-worker").start()
+        threading.Thread(target=runner, daemon=True, name="phoenix-worker").start()
 
     def _background_succeeded(self, button: ttk.Button, on_success: Callable[[ResultT], None], result: ResultT) -> None:
         button.state(["!disabled"])
@@ -493,7 +493,7 @@ class PhoneAnalyzerGUI:
 
 
 def main() -> None:
-    """Start the Pheonix desktop application."""
+    """Start the Phoenix desktop application."""
 
     logging.basicConfig(
         level=logging.INFO,

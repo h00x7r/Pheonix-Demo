@@ -4,7 +4,7 @@ import tkinter as tk
 
 import pytest
 
-from Pheonix import APP_VERSION, PhoneAnalyzerGUI
+from phoenix import APP_VERSION, PhoneAnalyzerGUI
 from phone_analyzer import PhoneAnalyzer
 
 VALID_US_NUMBER = "+12025550123"
@@ -19,7 +19,7 @@ def test_desktop_window_constructs_and_closes() -> None:
     root = tk.Tk()
     app = PhoneAnalyzerGUI(root)
 
-    assert app.root.title() == "Pheonix 2026.1.0"
+    assert app.root.title() == "Phoenix 2026.1.0"
     app._on_close()
 
 

@@ -1,4 +1,4 @@
-"""Phone-number validation and metadata helpers for Pheonix.
+"""Phone-number validation and metadata helpers for Phoenix.
 
 The module uses Google's libphonenumber metadata through the ``phonenumbers``
 package.  It intentionally reports only carrier, numbering-plan region and time
