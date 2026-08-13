@@ -1,47 +1,89 @@
-# Pheonix Tool
+# Pheonix
 
-A powerful phone number analysis tool that provides detailed information about phone numbers, including carrier information, geolocation, and social media presence.
+**Pheonix** أداة سطح مكتب مفتوحة المصدر لتحليل **بيانات خطة ترقيم الهاتف العامة**، مع ميزات اختيارية لإثراء معلومات النطاقات والبنية الشبكية عند وجود تفويض صريح من المالك. الإصدار `2026.1.0` متاح بالكامل **من دون تجربة محدودة أو دفع أو مفتاح ترخيص أو تفعيل عن بعد أو عدّاد استخدام**.
 
-## Features
+> تعرض الأداة بيانات وصفية عامة مثل صيغة الرقم، شركة الاتصالات المعلنة، منطقة خطة الترقيم، والمنطقة الزمنية. لا تحدد هوية المشترك، ولا تثبت ملكية حساب، ولا تتعقب موقع هاتف أو شخص أو جهاز.
 
-### Features:
-- Basic phone number validation and information
-- Social media account lookup
-- Interactive map location view
-- Modern GUI interface
-- Cross-platform compatibilityn
+| الوظيفة | الحالة | الملاحظات |
+| --- | --- | --- |
+| تنسيق الرقم والتحقق منه | متاحة دائماً | تستخدم بيانات `phonenumbers` العامة. |
+| شركة الاتصالات ومنطقة/نوع الرقم | متاحة دائماً | هي بيانات خطة ترقيم، وليست معلومات هوية. |
+| خريطة منطقة خطة الترقيم | اختيارية | تتطلب `OPEN_CAGE_API_KEY`؛ الخريطة تقريبية وعلى مستوى المنطقة. |
+| فحص بريد/اسم مستخدم أو سجل نطاق أو تسريبات | اختيارية | تتطلب حزم `osint` المناسبة، وبعضها يتطلب مفاتيح API. |
+| بيانات التسجيل العامة لعنوان IP | اختيارية | أدخل عناوين عامة تملكها أو لديك إذن صريح لفحصها. |
+| فحص المنافذ الشائع | مقيد بالتفويض | يستخدم `nmap -F` بمهلة 60 ثانية، ويتطلب تأكيداً في الواجهة. |
 
-1. Clone the repository:
+## التثبيت
+
+يتطلب المشروع **Python 3.10+**، وبيئة Tk المثبتة ضمن توزيعة بايثون المعتادة. يفضَّل استخدام بيئة افتراضية مستقلة.
+
 ```bash
-git clone https://github.com/h00x7r/Pheonix.git
-git clone https://github.com/h00x7r/Pheonix_Demo.git
+git clone https://github.com/Khalil-M-Khalil/Pheonix.git
 cd Pheonix
+python -m venv .venv
 ```
 
-2. Install required dependencies:
+فعّل البيئة الافتراضية ثم ثبّت النسخة الأساسية:
+
+| النظام | التفعيل | تثبيت النسخة الأساسية |
+| --- | --- | --- |
+| Linux/macOS | `source .venv/bin/activate` | `python -m pip install .` |
+| Windows PowerShell | `.venv\Scripts\Activate.ps1` | `python -m pip install .` |
+
+لتفعيل ميزات الإثراء الاختيارية، ثبّت مجموعة `osint`:
+
 ```bash
-pip install -r requirements.txt
+python -m pip install ".[osint]"
 ```
 
-## Usage
+يمكن أيضاً استخدام المسار المتوافق مع المشروع القديم:
 
-pyquirements
+```bash
+python -m pip install -r requirements.txt
+```
 
-- Python 3.8 or higher
-- Internet connection
-- Windows/Linux/MacOS
+## التشغيل
 
-## License
+بعد التثبيت، شغّل التطبيق بإحدى الطريقتين:
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+```bash
+pheonix
+# أو
+python Pheonix.py
+```
 
-## Support
+لا توجد أي خطوة شراء أو تسجيل أو تفعيل أو حدّ للاستخدام.
 
-For support, feature requests, or bug reports:
-- Create an issue on GitHub
-- Contact: h00x7r@gmail.com
-- WhatsApp : +963960955844
+## الإعدادات الاختيارية
 
-## Disclaimer
+لا تُحفظ مفاتيح الخدمات في المستودع. انسخ أسماء المتغيرات من [`.env.example`](.env.example) واضبطها في بيئة التشغيل لديك عند الحاجة.
 
-This tool is for legitimate purposes only. Users are responsible for compliance with local laws and regulations regarding phone number lookup and information gathering.
+```bash
+export OPEN_CAGE_API_KEY="your-key"  # خرائط المناطق الاختيارية
+export HIBP_API_KEY="your-key"       # فحص بريد تملك الوصول إليه فقط
+export GEOAPIFY_API_KEY="your-key"   # إثراء IP اختياري
+```
+
+| المتغير | الميزة | مطلوب؟ |
+| --- | --- | --- |
+| `OPEN_CAGE_API_KEY` | خريطة تقريبية لمنطقة خطة الترقيم | لا |
+| `HIBP_API_KEY` | فحص تسريبات البريد عبر المزود | لا |
+| `GEOAPIFY_API_KEY` | بيانات وصفية تقريبية لعناوين IP العامة | لا |
+
+## ضمان الجودة والتطوير
+
+توجد اختبارات وحدات للمنطق الأساسي وإعدادات موحدة في [`pyproject.toml`](pyproject.toml). شغّلها بعد تثبيت أدوات التطوير:
+
+```bash
+python -m pip install ".[dev]"
+pytest
+ruff check .
+```
+
+## الاستخدام المسؤول
+
+تتحقق الواجهة من إقرار المستخدم بالتفويض قبل تنفيذ ميزات الإثراء أو فحص الشبكة. يجب إدخال بيانات أو نطاقات أو حسابات أو عناوين IP **تملكها أو تديرها أو لديك إذن صريح وواضح لتقييمها**. يتحمل المستخدم مسؤولية الالتزام بالقوانين المحلية وشروط مزودي الخدمات.
+
+## الرخصة
+
+المشروع مرخّص بموجب [MIT](LICENSE).

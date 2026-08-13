@@ -1,0 +1,72 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pheonix-tool"
+version = "2026.1.0"
+description = "A desktop utility for public phone numbering-plan metadata and authorised enrichment workflows."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Khalil M. Khalil" }]
+keywords = ["phone", "metadata", "osint", "desktop", "tkinter"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Win32 (MS Windows)",
+  "Environment :: X11 Applications :: Tk",
+  "Intended Audience :: Information Technology",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Security",
+]
+dependencies = [
+  "folium>=0.20,<0.21",
+  "opencage>=3.4,<4",
+  "phonenumbers>=9,<10",
+]
+
+[project.optional-dependencies]
+osint = [
+  "holehe==1.61",
+  "python-whois>=0.9.6,<1",
+  "requests>=2.32,<3",
+  "socialscan>=2.0,<3",
+]
+dev = [
+  "pytest>=8.3,<9",
+  "ruff>=0.12,<1",
+]
+
+[project.scripts]
+pheonix = "Pheonix:main"
+
+[project.urls]
+Homepage = "https://github.com/Khalil-M-Khalil/Pheonix"
+Repository = "https://github.com/Khalil-M-Khalil/Pheonix"
+Issues = "https://github.com/Khalil-M-Khalil/Pheonix/issues"
+
+[tool.setuptools]
+py-modules = ["Pheonix", "config", "osint_analyzer", "phone_analyzer"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py310"
+line-length = 120
+extend-exclude = ["location_map.html"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "SIM"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["config", "osint_analyzer", "phone_analyzer"]
