@@ -1,0 +1,8 @@
+/* Phoenix Command Center: immediate, guided entry action. */
+.hero-copy > p { margin-bottom: 18px; }
+.hero-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 23px; }
+.hero-actions button { display: flex; align-items: center; gap: 7px; padding: 11px 13px; color: #e6ece7; background: rgba(8, 14, 15, .48); border: 1px solid rgba(220, 231, 226, .24); font-size: 10px; backdrop-filter: blur(10px); transition: transform 160ms ease-out, background 160ms ease-out; }
+.hero-actions button:first-child { color: #071011; background: #e5ddc1; border-color: #e5ddc1; font-weight: 700; }
+.hero-actions button:first-child:hover { background: #d5b76e; }
+.hero-actions button:active { transform: scale(.97); }
+@media (max-width: 620px) { .hero-actions { margin-bottom: 18px; } .hero-actions button { padding: 10px; } }
