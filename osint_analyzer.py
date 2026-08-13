@@ -31,7 +31,7 @@ class OSINTAnalyzer:
 
     def __init__(self, session: requests.Session | None = None) -> None:
         self._session = session or requests.Session()
-        self._session.headers.update({"User-Agent": "Pheonix/2026 (authorised-use desktop client)"})
+        self._session.headers.update({"User-Agent": "Phoenix/2026 (authorised-use desktop client)"})
 
     async def analyze_email_or_username(self, query: str) -> dict[str, Any]:
         """Return Holehe results when its optional dependency is installed."""

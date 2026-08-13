@@ -3,7 +3,7 @@ requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "pheonix-tool"
+name = "phoenix-tool"
 version = "2026.1.0"
 description = "A desktop utility for public phone numbering-plan metadata and authorised enrichment workflows."
 readme = "README.md"
@@ -45,15 +45,15 @@ dev = [
 ]
 
 [project.scripts]
-pheonix = "Pheonix:main"
+phoenix = "phoenix:main"
 
 [project.urls]
-Homepage = "https://github.com/Khalil-M-Khalil/Pheonix"
-Repository = "https://github.com/Khalil-M-Khalil/Pheonix"
-Issues = "https://github.com/Khalil-M-Khalil/Pheonix/issues"
+Homepage = "https://github.com/Khalil-M-Khalil/Phoenix"
+Repository = "https://github.com/Khalil-M-Khalil/Phoenix"
+Issues = "https://github.com/Khalil-M-Khalil/Phoenix/issues"
 
 [tool.setuptools]
-py-modules = ["Pheonix", "config", "osint_analyzer", "phone_analyzer"]
+py-modules = ["phoenix", "config", "osint_analyzer", "phone_analyzer"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
